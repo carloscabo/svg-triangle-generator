@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Triangle generator</title>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/4.0.0/normalize.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.019/css/hack.min.css">
+  <link rel="stylesheet" href="css/application.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="js/ready.js"></script>
+</head>
+<body>
+  <h1>SVG triangle generator</h1>
+  <div id="container-single">
+    <div class="settings">
+      <label>
+        Triangle radius <small>( 0.5px steps )</small><br>
+        <input id="triangle-radius" type="number" value="150" step="0.5">
+      </label>
+      <label>
+        Triangle rotation <small>( 1º steps, from 0º to 120º )</small><br>
+        <input id="rotation-angle-range" type="range" min="0" max="120" value="90" step="0.5">
+        <input type="number" id="rotation-angle" value="0"><span>º</span>
+        <div class="angle-buttons">
+          <button class="set-angle" data-angle="30">TOP</button>
+          <button class="set-angle" data-angle="0">RIGHT</button>
+          <button class="set-angle" data-angle="90">BOTTOM</button>
+          <button class="set-angle" data-angle="60">LEFT</button>
+        </div>
+      </label>
+      <label>
+        Padding around the resulting shape<br><small>Seems that adding a padding of 1px prevents several problems with web browser scaling / antialiasing algorithms</small><br>
+        <input id="svg-padding" type="number" value="1" step="1">
+      </label>
+      <label>
+        Fill color<br>
+        <input id="fill-color" type="color" value="#ff0080">
+      </label>
+    </div>
+
+    <div id="resulting-code">
+      <label>Resulting SVG code<br>
+        <textarea id="resulting-svg-code" name="resulting-svg-code" cols="30" rows="10"></textarea>
+      </label>
+      <label>
+        Resulting SVG inline IMG<br>
+        <input type="text" id="resulting-svg-inline-img">
+      </label>
+      <label>
+        Resulting SVG CSS background<br>
+        <input type="text" id="resulting-svg-css-background">
+      </label>
+      <label>
+        Resulting SVG inlined CSS background<br>
+        <input type="text" id="resulting-svg-inline-css-background">
+      </label>
+      <label>
+        Resulting SVG inline CSS pseudo-element (:before, :after)<br>
+        <input type="text" id="resulting-svg-inline-pseudo">
+      </label>
+    </div>
+  </div>
+
+  <div id="preview-column">
+    <div id="container-preview">
+
+    </div>
+    <label>
+      <input type="checkbox" name="trim-whitespace" id="trim-whitespace"> Trim whitespace around resulting SVG
+    </label>
+    <label>
+      <a id="download-file" href="" download="triangle.svg">Download resulting SVG</a>
+    </label>
+  </div>
+
+</body>
+</html>
