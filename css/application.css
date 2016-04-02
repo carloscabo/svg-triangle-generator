@@ -44,6 +44,14 @@ label {
   font-weight: 700;
 }
 
+h1 {
+  font-size: 18px;
+}
+
+h1 small {
+  font-size: 14px;
+}
+
 small {
   font-weight: 400;
 }
