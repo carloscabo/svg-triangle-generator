@@ -13,6 +13,7 @@
 <body>
   <h1>SVG triangle generator <small><a href="https://github.com/carloscabo/svg-triangle-generator">https://github.com/carloscabo/svg-triangle-generator</a></small></h1>
   <div id="container-single">
+
     <div class="settings">
       <label>
         Triangle radius <small>( 0.5px steps )</small><br>
@@ -37,42 +38,53 @@
         Fill color<br>
         <input id="fill-color" type="color" value="#ff0080">
       </label>
+      <label>
+        <input type="checkbox" name="trim-whitespace" id="trim-whitespace"> Trim whitespace around resulting SVG
+      </label>
+      <label>
+        <a id="download-file" href="" download="triangle.svg">Download resulting SVG</a>
+      </label>
     </div>
 
-    <div id="resulting-code">
-      <label>Resulting SVG code<br>
-        <textarea id="resulting-svg-code" name="resulting-svg-code" cols="30" rows="10"></textarea>
-      </label>
-      <label>
-        Resulting SVG inline IMG<br>
-        <input type="text" id="resulting-svg-inline-img">
-      </label>
-      <label>
-        Resulting SVG CSS background<br>
-        <input type="text" id="resulting-svg-css-background">
-      </label>
-      <label>
-        Resulting SVG inlined CSS background<br>
-        <input type="text" id="resulting-svg-inline-css-background">
-      </label>
-      <label>
-        Resulting SVG inline CSS pseudo-element (:before, :after)<br>
-        <input type="text" id="resulting-svg-inline-pseudo">
-      </label>
-    </div>
+    <div id="container-preview"></div>
   </div>
 
-  <div id="preview-column">
-    <div id="container-preview">
-
-    </div>
+  <div id="resulting-code">
+    <label>Resulting SVG code<br>
+      <textarea id="resulting-svg-code" name="resulting-svg-code pref" cols="30" rows="10" class="preferred"></textarea>
+    </label>
+    <hr>
+    <p>Seems that in <b>IE9 / IE10 the inlined SVG is not shown if is not escaped, URLEncoded, or encoded in Base64</b>. I've choose to <em>escape</em> the SVG because is slightly smaller and is still posible to adjust some parameters by hand as escaped code is pretty readeable (opposite to Base64).</p>
+    <p>Anothe fun bug is that <b>Firefox does not renders correctly inlined code that include the <em>hash symbol</em></b> so it has to be replaced by '%23'</p>
     <label>
-      <input type="checkbox" name="trim-whitespace" id="trim-whitespace"> Trim whitespace around resulting SVG
+      Resulting SVG inline IMG (escaped)<br>
+      <input type="text" id="resulting-svg-inline-img-escaped" class="preferred">
     </label>
     <label>
-      <a id="download-file" href="" download="triangle.svg">Download resulting SVG</a>
+      Resulting SVG CSS background (escaped)<br>
+      <input type="text" id="resulting-svg-css-background-escaped" class="preferred">
+    </label>
+    <label>
+      Resulting SVG inline CSS pseudo-element (:before, :after) (escaped)<br>
+      <input type="text" id="resulting-svg-inline-pseudo-escaped" class="preferred">
+    </label>
+    <hr>
+    <p>Below plain text version of the inlined SVG, <b>Remember this ones only work in modern browsers.</b></p>
+    <label>
+      Resulting SVG inline IMG<br>
+      <input type="text" id="resulting-svg-inline-img">
+    </label>
+    <label>
+      Resulting SVG inlined CSS background<br>
+      <input type="text" id="resulting-svg-css-background">
+    </label>
+    <label>
+      Resulting SVG inline CSS pseudo-element (:before, :after)<br>
+      <input type="text" id="resulting-svg-inline-pseudo">
     </label>
   </div>
+
+
 
 </body>
 </html>

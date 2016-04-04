@@ -3,9 +3,9 @@ var
     svg: '<svg xmlns="http://www.w3.org/2000/svg" width="{{w}}" height="{{h}}" viewBox="0 0 {{w}} {{h}}"><path d="{{path}}" fill="{{color}}"/></svg>',
     // Debug circle shape
     // <circle cx="{{cx}}" cy="{{cy}}" r="{{r}}" fill="#ccc"/>
-    img: '<img src="data:image/svg+xml;utf8,{{svg}}">',
-    bg: 'background-image:url("data:image/svg+xml;utf8,{{svg}}");',
-    pseudo: "content: url('data:image/svg+xml;utf8,{{svg}}');",
+    img: '<img src="data:image/svg+xml,{{svg}}">',
+    bg: 'background-image:url("data:image/svg+xml,{{svg}}");',
+    pseudo: 'content: url("data:image/svg+xml,{{svg}}");',
     down: "data:application/octet-stream;charset=utf-8,{{svg}}'"
   },
   default_settings = {
@@ -66,7 +66,7 @@ function readVars () {
   set.cy = set.cx;
   set.w = set.cx * 2;
   set.h = set.cy * 2;
-  set.fill = $('#fill-color').val(),
+  set.fill = $('#fill-color').val();
   set.a = parseFloat( $('#rotation-angle-range').val().replace(',','.') );
 }
 
@@ -106,19 +106,29 @@ function createSvgOutput() {
   var
     out = {};
 
-  out.svg     = tpl.svg.replace(/\{\{w\}\}/g, set.w).replace(/\{\{h\}\}/g, set.h).replace('{{path}}', set.path).replace('{{color}}', set.fill ).replace('{{cx}}', set.cx).replace('{{cy}}', set.cy).replace('{{r}}', set.r);
+  // Create SVG code
+  out.svg = tpl.svg.replace(/\{\{w\}\}/g, set.w).replace(/\{\{h\}\}/g, set.h).replace('{{path}}', set.path).replace('{{color}}', set.fill ).replace('{{cx}}', set.cx).replace('{{cy}}', set.cy).replace('{{r}}', set.r);
+  out.svg_escaped = escape(out.svg);
 
-  out.img     = tpl.img.replace('{{svg}}',    out.svg);
-  out.bg      = tpl.bg.replace('{{svg}}',     out.svg);
-  out.pseudo  = tpl.pseudo.replace('{{svg}}', out.svg);
-  out.bg_esc = tpl.bg.replace('{{svg}}', escape(out.svg) );
-  out.down = tpl.down.replace('{{svg}}', escape(out.svg) );
+  out.img        = tpl.img.replace('{{svg}}', out.svg.replace(/"/g,"'").replace(/#/g, '%23') );
+  out.bg         = tpl.bg.replace('{{svg}}', out.svg.replace(/"/g,"'").replace(/#/g, '%23') );
+  out.pseudo     = tpl.pseudo.replace('{{svg}}', out.svg.replace(/"/g,"'").replace(/#/g, '%23') );
+  // Escaped
+  out.img_esc    = tpl.img.replace('{{svg}}', out.svg_escaped);
+  out.bg_esc     = tpl.bg.replace('{{svg}}', out.svg_escaped);
+  out.pseudo_esc = tpl.pseudo.replace('{{svg}}', out.svg_escaped);
+  // Donload file
+  out.down       = tpl.down.replace('{{svg}}', escape(out.svg) );
 
   $('#resulting-svg-code').val( out.svg );
+
   $('#resulting-svg-inline-img').val( out.img );
   $('#resulting-svg-css-background').val( out.bg );
-  $('#resulting-svg-inline-css-background').val( out.bg_esc );
   $('#resulting-svg-inline-pseudo').val( out.pseudo );
+  $('#resulting-svg-inline-img-escaped').val( out.img_esc );
+  $('#resulting-svg-css-background-escaped').val( out.bg_esc );
+  $('#resulting-svg-inline-pseudo-escaped').val( out.pseudo_esc );
+
   $('#container-preview').attr('style', out.bg_esc );
 
   $('#download-file').attr('href', out.down ).attr('download', 'triangle-w'+set.w+'-h'+set.h+'-r'+set.r+'-f'+set.fill.replace('#','')+'.svg');
@@ -159,7 +169,17 @@ function trimWhiteSpace() {
   console.log(set);
 }
 
-
 function roundF2d (x) {
   return Math.round( x * 100) / 100;
 }
+
+/* Seems that using plain JS escape() outputs a slightly smaller string that is IE9+ compatible */
+/* From http://meyerweb.com/eric/tools/dencoder/ */
+/*
+function em_encode( unencoded ) {
+  return encodeURIComponent( unencoded ).replace(/'/g,"%27").replace(/"/g,"%22");
+}
+function em_decode( encoded ) {
+  return decodeURIComponent(encoded.replace(/\+/g,  " "));
+}
+*/
